@@ -71,26 +71,26 @@ public class PrincipalMonedas {
                 lectura.nextLine();
                 String monedaInicial = obtenerMonedaInicial(opcion);
                 String monedaFinal = obtenerMonedaFinal(opcion);
+                // Validación de monedas obtenidas
                 if (monedaInicial == null || monedaFinal == null) {
                     System.out.println("Opción inválida. Intente nuevamente.");
                     System.out.println("");
                     continue;
                 }
+                // Construcción de la URL para consultar la API
                 String URL_FINAL = BASE_URL + API_KEY + "/pair/" +
                         monedaInicial + "/" + monedaFinal;
-
                 HttpClient client = HttpClient.newHttpClient();
-
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(URL_FINAL))
                         .build();
-
                 HttpResponse<String> response = client
                         .send(request, HttpResponse.BodyHandlers.ofString());
-
+                // Procesar el JSON recibido de la API
                 String json = response.body();
                 DatoMoneda datoMoneda = gson.fromJson(json, DatoMoneda.class);
                 Moneda moneda = new Moneda(datoMoneda, cantidadInicial);
+                // Realizar la conversión y agregar al historial
                 moneda.convertirMoneda();
                 historial.add(moneda.toString());
                 System.out.println("Operación exitosa!!!");
@@ -115,7 +115,7 @@ public class PrincipalMonedas {
         }
         System.out.println("");
     }
-
+    // Método para obtener la moneda inicial según la opción seleccionada
     private String obtenerMonedaInicial(int opcion) {
         return switch (opcion) {
             case 1, 2, 6, 7, 8 -> "PEN"; // Soles
@@ -124,7 +124,7 @@ public class PrincipalMonedas {
             default -> null;
         };
     }
-
+    // Método para obtener la moneda final según la opción seleccionada
     private String obtenerMonedaFinal(int opcion) {
         return switch (opcion) {
             case 1 -> "USD"; // Soles -> Dólar
