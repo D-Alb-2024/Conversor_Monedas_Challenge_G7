@@ -1,5 +1,4 @@
 import principal.PrincipalMonedas;
-import principal.PrincipalStarWars;
 
 import java.io.IOException;
 
